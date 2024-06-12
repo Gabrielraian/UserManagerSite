@@ -1,0 +1,48 @@
+<section class="flex-col padding-20">
+    <div class=breadcumbs>
+        <h1>Cadastro de Usuários</h1>
+    </div>
+
+    <form action="" method="post" class="form-line">
+        <fieldset class="flex-row padding-20">
+            <legend>Informações do Usuário</legend>
+    
+            <div class="flex-row grow">
+            
+                <div class="flex-col grow">
+                    <label>Nome</label>
+                    <input type="text" name="name">
+                </div>
+                
+                <div class="flex-col">
+                    <label>Email</label>
+                    <input type="text" name="email">
+                </div>
+    
+                <div class="flex-col">
+                    <label>Data de Nascimento</label>
+                    <input type="date" name="birthday">
+                </div>
+
+                <div class="flex-col">
+                    <label>Pefil</label>
+                    <select name="role_id">
+                        <option value=""></option>
+                        <option value="1">Programador</option>
+                    </select>
+                </div>
+            </div>
+    
+        </fieldset>
+
+        <div class="flex-row end grow">
+            <div>
+                <a class="button secondary" href="/Users/Index">Voltar</a>
+            </div>
+            <div>
+                <button class="button primary" type="submit">salvar</button>
+            </div>
+        </div>
+    </form>
+    
+</section>

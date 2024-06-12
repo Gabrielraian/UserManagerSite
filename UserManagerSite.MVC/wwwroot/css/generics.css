@@ -1,0 +1,285 @@
+main h1 {
+    color: #2308f0;
+    flex-grow: 1;
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.317);
+    gap: 20px;
+    position: relative;
+}
+
+fieldset legend {
+    max-width: 30%;
+    max-height: 23%;
+    position: absolute;
+    top: -15px;
+    left: 20%;
+    transform: translateX(-50%);
+    background-color: #2308f0;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: clamp(10px, 2vw, 16px);;
+    font-weight: bolder;
+}
+
+input {
+    height: 40px;
+    border: 1px solid rgb(205, 205, 205);
+    background-color: rgb(242, 242, 242);
+    padding: 7px 15px;
+    border-radius: 20px;
+}
+
+input:focus {
+    outline: 1px solid rgb(148, 148, 148);
+}
+
+.form-col {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+.form-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 20px;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.grow {
+    flex-grow: 1 !important;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-line {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+select {
+    border: 1px solid rgb(205, 205, 205);
+    background-color: rgb(242, 242, 242);
+    padding: 7px 15px;
+    border-radius: 20px;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    height: 35px;
+    border: none;
+    letter-spacing: 0.5px;
+    border-radius: 18px;
+    transition: 0.5s;
+}
+
+.button:hover {
+    box-shadow: -1px 1px 12px #2308f0a3;
+}
+
+.primary {
+    padding-right: 30px;
+    padding-left: 30px;
+    background-color: #2308f0;
+    color: white;
+    font-weight: bolder;
+}
+.secondary {
+    padding-right: 30px;
+    padding-left: 30px;
+    background-color: white;
+    border: 2px solid #2308f0;
+    color: #2308f0;
+    font-weight: bolder;
+}
+
+.center {
+    align-items: center;
+    justify-content: center;
+}
+
+.padding-20 {
+    padding:20px;
+}
+
+.padding-top-20 {
+    padding-top:20px;
+}
+
+label {
+    font-weight: bolder;
+}
+
+.breadcumbs {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: end;
+}
+footer {
+    background-color: #0077cc;
+}
+
+footer .container {
+    background-color: #0077cc;
+    color: white;
+}
+
+footer .footer a{
+    color: white;
+}
+
+.bg-white .navbar-brand {
+    color: white;
+}
+.bg-white {
+    background-color: #0077cc !important;
+}
+
+.nav-item {
+    color: white;
+}
+
+.text-dark {
+    color: white;
+}
+
+a {
+    color: inherit;
+    text-decoration: none; 
+}
+
+a:hover {
+    color: inherit !important; 
+    text-decoration: none;
+}
+
+.droplist .list{
+    visibility: hidden;
+    transition: 0.7s;
+}
+
+.droplist .list:hover{
+    visibility: visible;
+}
+
+.form-line {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.end {
+    justify-content: flex-end;
+}
+
+.hidden {
+    display: none;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+table {
+    color: #2308f0;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    gap: 20px;
+    position: relative;
+    font-weight: 100;
+}
+
+table thead {
+    width: 100%;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+table tbody  *:not(a){
+    color: #6d6d6d;
+}
+
+table tbody tr{
+    border-top: 1px solid rgb(178, 178, 178);
+    border-radius: 20px;
+}
+
+table tr {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+table th {
+    padding: 20px;
+}
+
+@media (max-width: 990px) {
+    table {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    table thead {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    table thead tr{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    table tbody {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        
+    }
+
+    table tbody tr{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: none;
+    }
+  }
+
+
+
