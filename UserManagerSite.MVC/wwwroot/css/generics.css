@@ -281,5 +281,23 @@ table th {
     }
   }
 
+  .text-dark {
+    color: white !important;
+    font-size: 20px;
+  }
+  .nav-item .nav-link::after {
+    width: 0%;
+    content: "";
+    display: block;
+    height: 5px;
+    border-bottom: 3px solid white;
+    transition: 0.7s;
+  }
+
+  .text-dark:hover::after {
+    width: 75%;
+    border-bottom: 3px solid white;
+  }
+
 
 

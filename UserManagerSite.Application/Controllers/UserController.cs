@@ -1,16 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using UserManagerSite.Application.Data;
 using UserManagerSite.Application.Models;
 
 namespace UserManagerSite.Application.Controllers
 {
-    public class UserController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UserController : ControllerBase
     {
         private readonly UserManagerSiteContext _context;
 
@@ -19,78 +19,82 @@ namespace UserManagerSite.Application.Controllers
             _context = context;
         }
 
-        // GET: User
-        public async Task<IActionResult> Index()
+        // GET: api/User
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            return View(await _context.User.ToListAsync());
+            var users = await _context.User
+                .Include(u => u.role) // Garante que a entidade Role esteja incluída na consulta
+                .Select(u => new UserDTO
+                {
+                    id = u.id,
+                    roleId = u.role.id ?? 0,
+                    roleName = u.role.role ?? "",
+                    name = u.name, // Supondo que o nome de usuário está na propriedade 'name'
+                    email = u.email
+                })
+                .ToListAsync();
+
+            return Ok(users);
         }
 
-        // GET: User/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserDTO>> GetUser(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var user = await _context.User
-                .FirstOrDefaultAsync(m => m.id == id);
+                .Include(u => u.role) // Garante que a entidade Role esteja incluída na consulta
+                .Where(u => u.id == id)
+                .Select(u => new UserDTO
+                {
+                    id = u.id,
+                    roleId = u.role.id ?? 0,
+                    roleName = u.role.role ?? "",
+                    name = u.name, // Supondo que o nome de usuário está na propriedade 'name'
+                    email = u.email
+                })
+                .FirstOrDefaultAsync();
+
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return Ok(user);
         }
 
-        // GET: User/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: User/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/User
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,birthdate,email")] User user)
+        public async Task<ActionResult<User>> CreateUser(User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                var existingRole = await _context.Role.FindAsync(user.role.id);
+
+                if (existingRole == null)
+                {
+                    return BadRequest("Role does not exist.");
+                }
+
+                user.role = existingRole;
+
+                _context.User.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return CreatedAtAction(nameof(GetUser), new { id = user.id }, user);
             }
-            return View(user);
+
+            return BadRequest(ModelState);
         }
 
-        // GET: User/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        // POST: User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,birthdate,email")] User user)
+        // PUT: api/User/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditUser(int id, User user)
         {
             if (id != user.id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             if (ModelState.IsValid)
@@ -102,7 +106,7 @@ namespace UserManagerSite.Application.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.id))
+                    if (!UserExists(id))
                     {
                         return NotFound();
                     }
@@ -111,42 +115,25 @@ namespace UserManagerSite.Application.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return NoContent();
             }
-            return View(user);
+            return BadRequest(ModelState);
         }
 
-        // GET: User/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/User/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.id == id);
+            var user = await _context.User.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
-        }
-
-        // POST: User/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var user = await _context.User.FindAsync(id);
-            if (user != null)
-            {
-                _context.User.Remove(user);
-            }
-
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool UserExists(int id)

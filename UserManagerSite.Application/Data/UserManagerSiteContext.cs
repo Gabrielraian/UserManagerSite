@@ -14,7 +14,7 @@ namespace UserManagerSite.Application.Data
         {
         }
 
-        public DbSet<UserManagerSite.Application.Models.Role> Role { get; set; } = default!;
-        public DbSet<UserManagerSite.Application.Models.User> User { get; set; } = default!;
+        public DbSet<Role> Role { get; set; } = null!;
+        public DbSet<User> User { get; set; } = null!;
     }
 }

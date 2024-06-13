@@ -6,9 +6,9 @@ namespace UserManagerSite.Application.Models;
 
 public class Role
 {
-    public int id {get; set;}
+    public int? id {get; set;}
     [StringLength(100, MinimumLength=3)]
     [Required]
     public string? role {get; set;}
-    public virtual ICollection<User> Users {get; set;}
+    public virtual ICollection<User>? Users { get; set; }
 }
