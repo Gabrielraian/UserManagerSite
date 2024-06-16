@@ -1,73 +1,65 @@
-<style>
-    
+@model List<UserManagerSite.MVC.Data.RoleDTO>
 
-</style>
+    @{
+        var idValue = ViewContext.HttpContext.Request.Query["id"];
+        var roleValue = ViewContext.HttpContext.Request.Query["role"];
+    }
 
-
-<section class="flex-col padding-20">
-    
-    <div class=breadcumbs>
-        <h1>Listagem de Perfis</h1>
-        <div class="flex-col">
-            <a href="/Roles/Add" class="button primary">Cadastrar</a>
-        </div>
-    </div>
-
-    <fieldset>
-        <legend>Filtros</legend>
-
-        <div class="flex-row gap-20 padding-20 grow">
-
+    <section class="flex-col padding-50">
+        <div class="breadcumbs">
+            <h1>Listagem de Roles</h1>
             <div class="flex-col">
-                <label>Id</label>
-                <input type="number" name="id">
+                <a href="/Roles/Add" class="button primary">Cadastrar</a>
             </div>
-
-            <div class="flex-col">
-                <label>Pefil</label>
-                <input type="text" name="name">
-            </div>
-
-
-            <div class="flex-row center padding-top-20">
-                <button class="button primary">Buscar</button>
-            </div>
-
         </div>
-
-        
-    </fieldset>
-
-
-    <fieldset>
-        <table>
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Nome</th>
-                    <th>ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>1</th>
-                    <th>Programador</th>
-                    <th>
-                        <div class="flex-row">
-                            <div class="droplist">
-                                <a class="button secondary">Ações ▾</a>
-                                <div class="list">
-                                    <a class="droplist-link" href="/Roles/Edit">Editar</a>
-                                    <a class="droplist-link" href="">Deletar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-    </fieldset>
-</section>
-
-
-
+    
+        <fieldset>
+            <legend>Filtros</legend>
+            <form asp-action="Index" method="get">
+                <div class="flex-row gap-20 padding-20 grow">
+                    <div class="flex-col">
+                        <label>Id</label>
+                        <input type="number" name="id" value="@idValue">
+                    </div>
+                    <div class="flex-col">
+                        <label>Nome</label>
+                        <input type="text" name="role" value="@roleValue">
+                    </div>
+                    <div class="flex-row center padding-top-20">
+                        <button class="button primary">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+    
+        <fieldset>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model)
+                    {
+                        <tr>
+                            <th>@role.id</th>
+                            <th>@role.role</th>
+                            <th>
+                                <button class="button secondary">
+                                    <div>Ações ▾</div>
+                                    <div class="droplist right">
+                                        <a asp-action="Edit" asp-route-id="@role.id">Editar</a>
+                                        <a asp-action="Delete" asp-route-id="@role.id">Excluir</a>
+                                    </div>
+                                </button>
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </fieldset>
+    </section>
+    

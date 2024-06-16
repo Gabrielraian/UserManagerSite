@@ -1,9 +1,11 @@
+@model UserManagerSite.MVC.ViewModels.RoleViewModel
+
 <section class="flex-col padding-20">
-    <div class=breadcumbs>
-        <h1>Edição de Perfil</h1>
+    <div class="breadcumbs">
+        <h1>Editar Perfil</h1>
     </div>
 
-    <form action="" method="post" class="form-line">
+    <form asp-action="Add" method="post" class="form-line">
         <fieldset class="flex-row padding-20">
             <legend>Informações do Perfil</legend>
     
@@ -11,21 +13,22 @@
         
                 <div class="flex-col grow">
                     <label>Nome</label>
-                    <input type="text" name="name">
+                    <input type="text" name="Role.role" value="@Model.Role.role">
                 </div>
                 
             </div>
     
         </fieldset>
 
+        <input type="hidden" name="Role.id" value="@Model.Role.id" />
+
         <div class="flex-row end grow">
             <div>
                 <a class="button secondary" href="/Roles/Index">Voltar</a>
             </div>
             <div>
-                <button class="button primary" type="submit">salvar</button>
+                <button class="button primary" type="submit">Salvar</button>
             </div>
         </div>
     </form>
-    
 </section>

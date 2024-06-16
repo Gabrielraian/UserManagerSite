@@ -1,38 +1,51 @@
-<section class="flex-col padding-20">
-    <div class=breadcumbs>
-        <h1>Cadastro de Usuários</h1>
+@model UserManagerSite.MVC.Models.UserRoleViewModel
+
+@{
+    ViewBag.Title = "Página de Usuário";
+}
+
+<section class="flex-col padding-50">
+    <div class="breadcrumbs">
+        <h1>Cadastro de Usuário</h1>
     </div>
 
-    <form action="" method="post" class="form-line">
+    <form asp-action="Add" method="post" class="form-line">
         <fieldset class="flex-row padding-20">
             <legend>Informações do Usuário</legend>
-    
-            <div class="flex-row grow">
-            
-                <div class="flex-col grow">
-                    <label>Nome</label>
-                    <input type="text" name="name">
-                </div>
-                
-                <div class="flex-col">
-                    <label>Email</label>
-                    <input type="text" name="email">
-                </div>
-    
-                <div class="flex-col">
-                    <label>Data de Nascimento</label>
-                    <input type="date" name="birthday">
-                </div>
 
-                <div class="flex-col">
-                    <label>Pefil</label>
-                    <select name="role_id">
-                        <option value=""></option>
-                        <option value="1">Programador</option>
-                    </select>
+            <div class="flex-col gap-20 grow">
+                <div class="flex-row grow">
+                    <div class="flex-col grow">
+                        <label>Nome*</label>
+                        <input type="text" name="User.name" minlength="2" maxlength="100" value="@Model.User.name">
+                        @Html.ValidationMessageFor(model => model.User.name)
+                    </div>
+
+                    <div class="flex-col grow">
+                        <label>Email*</label>
+                        <input type="email" name="User.email" minlength="2" maxlength="100" value="@Model.User.email">
+                        @Html.ValidationMessageFor(model => model.User.email)
+                    </div>
+                </div>
+                <div class="flex-row grow">
+                    <div class="flex-col grow">
+                        <label>Data de Nascimento*</label>
+                        <input type="date" name="User.birthdate" value="@(Model.User.birthdate != DateTime.MinValue ? Model.User.birthdate.ToString("yyyy-MM-dd") : string.Empty)">
+                        @Html.ValidationMessageFor(model => model.User.birthdate)
+                    </div>
+                    <div class="flex-col grow">
+                        <label>Perfil*</label>
+                        <select name="User.roleId">
+                            <option value=""></option>
+                            @foreach (var role in Model.Roles)
+                            {
+                                <option value="@role.id" selected="@(Model.User.roleId.ToString() == role.id.ToString())">@role.role</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.User.roleId)
+                    </div>
                 </div>
             </div>
-    
         </fieldset>
 
         <div class="flex-row end grow">
@@ -40,9 +53,8 @@
                 <a class="button secondary" href="/Users/Index">Voltar</a>
             </div>
             <div>
-                <button class="button primary" type="submit">salvar</button>
+                <button class="button primary" type="submit">Salvar</button>
             </div>
         </div>
     </form>
-    
 </section>

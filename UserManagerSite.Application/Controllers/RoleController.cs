@@ -22,9 +22,21 @@ namespace UserManagerSite.Application.Controllers
 
         // GET: api/Role
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
+        public async Task<ActionResult<IEnumerable<Role>>> GetRoles(int? id, string? role)
         {
-            return await _context.Role.ToListAsync();
+            var query = _context.Role.AsQueryable();
+
+            if (id.HasValue)
+            {
+                query = query.Where(r => r.id == id.Value);
+            }
+
+            if (!string.IsNullOrEmpty(role))
+            {
+                query = query.Where(r => r.role.Contains(role));
+            }
+
+            return await query.ToListAsync();
         }
 
         // GET: api/Role/5

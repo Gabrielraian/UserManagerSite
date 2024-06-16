@@ -1,3 +1,7 @@
+main {
+    height: 100%;
+}
+
 main h1 {
     color: #2308f0;
     flex-grow: 1;
@@ -57,6 +61,7 @@ input:focus {
 .flex-col {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
 .grow {
@@ -90,16 +95,6 @@ select {
     border-radius: 20px;
 }
 
-.button {
-    display: flex;
-    align-items: center;
-    height: 35px;
-    border: none;
-    letter-spacing: 0.5px;
-    border-radius: 18px;
-    transition: 0.5s;
-}
-
 .button:hover {
     box-shadow: -1px 1px 12px #2308f0a3;
 }
@@ -111,14 +106,8 @@ select {
     color: white;
     font-weight: bolder;
 }
-.secondary {
-    padding-right: 30px;
-    padding-left: 30px;
-    background-color: white;
-    border: 2px solid #2308f0;
-    color: #2308f0;
-    font-weight: bolder;
-}
+
+
 
 .center {
     align-items: center;
@@ -180,14 +169,68 @@ a:hover {
     color: inherit !important; 
     text-decoration: none;
 }
-
-.droplist .list{
-    visibility: hidden;
-    transition: 0.7s;
+.button {
+    display: flex;
+    align-items: center;
+    position: relative; /* Adicione esta linha */
+    height: 35px;
+    border: none;
+    letter-spacing: 0.5px;
+    border-radius: 18px;
+    transition: 0.5s;
 }
 
-.droplist .list:hover{
-    visibility: visible;
+.secondary {
+    padding-right: 30px;
+    padding-left: 30px;
+    background-color: white;
+    border: 2px solid #2308f0;
+    color: #2308f0 !important;
+    font-weight: bolder;
+}
+
+.button:hover .droplist {
+    display: flex;
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.button:hover .droplist.right {
+    transform: translateY(0);
+}
+
+.droplist {
+    display: none;
+    flex-direction: column;
+    padding: 0;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+    background-color: #FFF;
+    position: absolute;
+    list-style: none;
+    top: calc(100% + 2px); /* Ajustado para garantir que esteja logo abaixo do botão */
+    left: 8% !important;
+    margin: 0;
+    width: max-content;
+    transform: translateX(-50%) translateY(-10px); /* Posição inicial para a animação */
+    opacity: 0; /* Inicialmente invisível */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Transição suave */
+    z-index: 1;
+}
+
+.droplist.right {
+    left: unset;
+    right: 0;
+    transform: translateY(-10px);
+}
+
+.droplist a {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.droplist a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .form-line {
@@ -226,9 +269,9 @@ table thead {
     text-transform: uppercase;
 }
 
-table tbody  *:not(a){
+/* table tbody  *:not(a){
     color: #6d6d6d;
-}
+} */
 
 table tbody tr{
     border-top: 1px solid rgb(178, 178, 178);
@@ -244,6 +287,8 @@ table tr {
 }
 
 table th {
+    display: flex;
+    flex: 1;
     padding: 20px;
 }
 
@@ -285,6 +330,7 @@ table th {
     color: white !important;
     font-size: 20px;
   }
+
   .nav-item .nav-link::after {
     width: 0%;
     content: "";
@@ -297,6 +343,18 @@ table th {
   .text-dark:hover::after {
     width: 75%;
     border-bottom: 3px solid white;
+  }
+
+  .padding-50 {
+    padding: 50px;
+  }
+
+  .gap-20 {
+    gap: 20px;
+  }
+
+  .gap-20 {
+    gap: 50px;
   }
 
 

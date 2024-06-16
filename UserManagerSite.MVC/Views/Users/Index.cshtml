@@ -1,124 +1,91 @@
-<style>
-    .space-between {
-        justify-content: space-between;
-    }
+@model UserManagerSite.MVC.ViewModels.UsersViewModel
 
-    table {
-        color: #2308f0;
-        justify-content: space-between;
-        width: 100%;
-        height: 100%;
-        padding: 20px;
-        border-radius: 20px;
-        gap: 20px;
-        position: relative;
-        font-weight: 100;
-    }
+@{
+    var idValue = ViewContext.HttpContext.Request.Query["id"];
+    var nameValue = ViewContext.HttpContext.Request.Query["name"];
+    var roleIdValue = ViewContext.HttpContext.Request.Query["roleId"];
+}
 
-    table thead {
-        width: 100%;
-        border-radius: 20px;
-        text-transform: uppercase;
-    }
-
-    table tbody  *:not(a){
-        color: #6d6d6d;
-    }
-
-    table tbody tr{
-        border-top: 1px solid rgb(178, 178, 178);
-        border-radius: 20px;
-    }
-
-    table tr {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        padding: 20px;
-    }
-
-    table th {
-        padding: 20px;
-    }
-
-</style>
+    <section class="flex-col padding-50">
 
 
-<section class="flex-col padding-20">
-    
-
-    <div class=breadcumbs>
-        <h1>Listagem de Usuários</h1>
-        <div class="flex-col">
-            <a href="/Users/Add" class="button primary">Cadastrar</a>
-        </div>
-    </div>
-
-    <fieldset>
-        <legend>Filtros</legend>
-
-        <div class="flex-row gap-20 padding-20 grow">
-
-            <div class="flex-col grow">
-                <label>Id</label>
-                <input type="number" name="id">
+        <div class=breadcumbs>
+            <h1>Listagem de Usuários</h1>
+            <div class="flex-col">
+                <a href="/Users/Add" class="button primary">Cadastrar</a>
             </div>
-
-            <div class="flex-col grow">
-                <label>Nome</label>
-                <input type="text" name="name">
-            </div>
-
-            <div class="flex-col grow">
-                <label>Pefil</label>
-                <select name="role_id">
-                    <option value=""></option>
-                    <option value="1">Programador</option>
-                </select>
-            </div>
-
-            <div class="flex-row center padding-top-20">
-                <button class="button primary">Buscar</button>
-            </div>
-
         </div>
 
-        
-    </fieldset>
+        <form asp-controller="Users" asp-action="Index" method="get">
+            <fieldset>
+                <legend>Filtros</legend>
 
+                <div class="flex-row gap-20 padding-20 grow">
 
-    <fieldset>
-        <table>
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Nome</th>
-                    <th>Perfil</th>
-                    <th>ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>1</th>
-                    <th>Gabriel Raian</th>
-                    <th>Programador</th>
-                    <th>
-                        <div class="flex-row">
-                            <div class="droplist">
-                                <a class="button secondary">Ações ▾</a>
-                                <div class="list">
-                                    <a class="droplist-link" href="/Users/Edit">Editar</a>
-                                    <a class="droplist-link" href="">Deletar</a>
+                    <div class="flex-col grow">
+                        <label>Id</label>
+                        <input type="number" name="id" value="@idValue">
+                    </div>
+
+                    <div class="flex-col grow">
+                        <label>Nome</label>
+                        <input type="text" name="name" value="@nameValue">
+                    </div>
+
+                    <div class="flex-col grow">
+                        <label>Pefil</label>
+                        <select name="roleId">
+                            <option value=""></option>
+                            @foreach (var role in Model.Roles)
+                            {
+                                <option value="@role.id" selected="@(roleIdValue == role.id.ToString())">@role.role</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="flex-row center padding-top-20">
+                        <button class="button primary">Buscar</button>
+                    </div>
+
+                </div>
+
+            </fieldset>
+        </form>
+
+        <fieldset>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Perfil</th>
+                        <th>ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users) {
+                    <tr>
+                        <th>
+                            @user.id
+                        </th>
+                        <th>
+                            @user.name
+                        </th>
+                        <th>
+                            @user.roleName
+                        </th>
+                        <th>
+                            <button class="button secondary">
+                                <div>Ações ▾</div>
+                                <div class="droplist right">
+                                    <a asp-action="Edit" asp-route-id="@user.id">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@user.id">Excluir</a>
                                 </div>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-    </fieldset>
-</section>
-
-
-
+                            </button>
+                        </th>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </fieldset>
+    </section>

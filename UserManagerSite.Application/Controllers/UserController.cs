@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,19 +22,31 @@ namespace UserManagerSite.Application.Controllers
 
         // GET: api/User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers(int? id, string? name, int? roleId)
         {
-            var users = await _context.User
-                .Include(u => u.role) // Garante que a entidade Role esteja incluída na consulta
-                .Select(u => new UserDTO
-                {
-                    id = u.id,
-                    roleId = u.role.id ?? 0,
-                    roleName = u.role.role ?? "",
-                    name = u.name, // Supondo que o nome de usuário está na propriedade 'name'
-                    email = u.email
-                })
-                .ToListAsync();
+            var query = _context.User.Include(u => u.role).AsQueryable();
+
+            if (id.HasValue)
+            {
+                query = query.Where(u => u.id == id.Value);
+            }
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(u => u.name.Contains(name));
+            }
+            if (roleId.HasValue)
+            {
+                query = query.Where(u => u.role.id == roleId.Value);
+            }
+
+            var users = await query.Select(u => new UserDTO
+            {
+                id = u.id,
+                roleId = u.role.id ?? 0,
+                roleName = u.role.role ?? "",
+                name = u.name,
+                email = u.email
+            }).ToListAsync();
 
             return Ok(users);
         }
@@ -42,14 +55,14 @@ namespace UserManagerSite.Application.Controllers
         public async Task<ActionResult<UserDTO>> GetUser(int id)
         {
             var user = await _context.User
-                .Include(u => u.role) // Garante que a entidade Role esteja incluída na consulta
+                .Include(u => u.role)
                 .Where(u => u.id == id)
                 .Select(u => new UserDTO
                 {
                     id = u.id,
                     roleId = u.role.id ?? 0,
                     roleName = u.role.role ?? "",
-                    name = u.name, // Supondo que o nome de usuário está na propriedade 'name'
+                    name = u.name,
                     email = u.email
                 })
                 .FirstOrDefaultAsync();
@@ -101,7 +114,43 @@ namespace UserManagerSite.Application.Controllers
             {
                 try
                 {
-                    _context.Update(user);
+                    var existingRole = await _context.Role.FindAsync(user.role.id);
+
+                    if (existingRole == null)
+                    {
+                        return BadRequest("Role does not exist.");
+                    }
+
+                    // Busca o usuário existente
+                    var existingUser = await _context.User.FindAsync(id);
+
+                    if (existingUser == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Atualiza os campos do usuário existente
+                    existingUser.name = user.name;
+                    existingUser.email = user.email;
+                    existingUser.role = existingRole;
+
+                    DateTime parsedBirthdate = new DateTime();
+                    if (!string.IsNullOrEmpty(user.birthdate.ToString()))
+                    {
+                        // Tenta converter a string de data no formato "yyyy-MM-ddTHH:mm" para DateTime
+                        if (DateTime.TryParseExact(user.birthdate.ToString(), "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result))
+                        {
+                            parsedBirthdate = result;
+                        }
+                        else
+                        {
+                            return BadRequest($"Invalid birthdate format: '{user.birthdate}'. Please use 'yyyy-MM-ddTHH:mm' format.");
+                        }
+                    }
+
+                    existingUser.birthdate = parsedBirthdate;
+
+                    _context.Update(existingUser);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
