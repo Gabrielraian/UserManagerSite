@@ -143,7 +143,7 @@ public class UsersController : Controller
                 }
             };
 
-            if (viewModel.User.id != 0 && viewModel.User.id != null) // Se o ID for diferente de 0, atualiza (PUT)
+            if (viewModel.User.id != 0 && viewModel.User.id != null)
             {
                 userMonted.id = viewModel.User.id;
 

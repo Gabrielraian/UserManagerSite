@@ -44,6 +44,7 @@ namespace UserManagerSite.Application.Controllers
                 id = u.id,
                 roleId = u.role.id ?? 0,
                 roleName = u.role.role ?? "",
+                birthdate = u.birthdate,
                 name = u.name,
                 email = u.email
             }).ToListAsync();
@@ -63,6 +64,7 @@ namespace UserManagerSite.Application.Controllers
                     roleId = u.role.id ?? 0,
                     roleName = u.role.role ?? "",
                     name = u.name,
+                    birthdate = u.birthdate,
                     email = u.email
                 })
                 .FirstOrDefaultAsync();
@@ -132,23 +134,8 @@ namespace UserManagerSite.Application.Controllers
                     // Atualiza os campos do usuário existente
                     existingUser.name = user.name;
                     existingUser.email = user.email;
+                    existingUser.birthdate = user.birthdate;
                     existingUser.role = existingRole;
-
-                    DateTime parsedBirthdate = new DateTime();
-                    if (!string.IsNullOrEmpty(user.birthdate.ToString()))
-                    {
-                        // Tenta converter a string de data no formato "yyyy-MM-ddTHH:mm" para DateTime
-                        if (DateTime.TryParseExact(user.birthdate.ToString(), "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result))
-                        {
-                            parsedBirthdate = result;
-                        }
-                        else
-                        {
-                            return BadRequest($"Invalid birthdate format: '{user.birthdate}'. Please use 'yyyy-MM-ddTHH:mm' format.");
-                        }
-                    }
-
-                    existingUser.birthdate = parsedBirthdate;
 
                     _context.Update(existingUser);
                     await _context.SaveChangesAsync();

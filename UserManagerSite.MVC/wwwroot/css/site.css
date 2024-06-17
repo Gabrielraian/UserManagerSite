@@ -69,3 +69,12 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.icon-users {
+  width: 100px;
+  height: 100px;
+  background-image: url('/img/users-icon.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+}

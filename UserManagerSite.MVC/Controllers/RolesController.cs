@@ -67,17 +67,20 @@ public class RolesController : Controller
                 return View(viewModel);
             }
 
+            var existingRolesResponse = await client.GetAsync("http://localhost:60702/api/Role");
+            
             var role = new Role
             {
                 role = viewModel.Role.role,
                 Users = null
             };
 
-            if (role.id != 0 && role.id != null) // Atualização (PUT)
+            if (viewModel.Role.id != 0 && viewModel.Role.id != null) // Atualização (PUT)
             {
                 role.id = viewModel.Role.id;
                 var jsonRole = JsonConvert.SerializeObject(role, Formatting.Indented);
                 var content = new StringContent(jsonRole, Encoding.UTF8, "application/json");
+                
                 var apiUrl = $"http://localhost:60702/api/Role/{role.id}";
                 response = await client.PutAsync(apiUrl, content);
             }

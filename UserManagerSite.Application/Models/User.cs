@@ -5,13 +5,14 @@ namespace UserManagerSite.Application.Models;
 
 public class User
 {
-    public int? id {get; set;}
-    [StringLength(100, MinimumLength=3)]
+    public int? id { get; set; }
+    [StringLength(100, MinimumLength = 3)]
     [Required]
-    public string? name {get; set;}
-    [Display(Name="Data de Nascimento")]
+    public string? name { get; set; }
+    [Display(Name = "Data de Nascimento")]
     [DataType(DataType.Date)]
-    public DateTime birthdate {get; set;}
-    public string? email {get; set;}
+    [Column(TypeName = "date")]
+    public DateTime birthdate { get; set; }
+    public string? email { get; set; }
     public virtual Role role { get; set; }
 }

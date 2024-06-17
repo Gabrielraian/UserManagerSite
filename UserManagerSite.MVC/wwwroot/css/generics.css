@@ -357,5 +357,14 @@ table th {
     gap: 50px;
   }
 
+  .text-center {
+    padding-top: 100px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
 
 
